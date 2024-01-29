@@ -11,7 +11,7 @@
 <AnchorPane fx:id="chatPanel" prefHeight="599.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ClientFormController">
    <children>
       <TextField fx:id="txtField" layoutX="14.0" layoutY="511.0" prefHeight="41.0" prefWidth="322.0" />
-      <JFXButton buttonType="RAISED" layoutX="345.0" layoutY="511.0" prefHeight="41.0" prefWidth="100.0" style="-fx-background-color: lightBlue;" text="Send">
+      <JFXButton buttonType="RAISED" layoutX="345.0" layoutY="511.0" onAction="#sendOnAction" prefHeight="41.0" prefWidth="100.0" style="-fx-background-color: lightBlue;" text="Send">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,5 +19,6 @@
             <VBox fx:id="vbox" prefHeight="478.0" prefWidth="424.0" />
          </content>
       </ScrollPane>
+      <JFXButton layoutX="353.0" layoutY="31.0" onAction="#btnAddOnAction" text="add" />
    </children>
 </AnchorPane>

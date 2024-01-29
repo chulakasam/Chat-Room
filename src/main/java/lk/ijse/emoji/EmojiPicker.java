@@ -1,4 +1,4 @@
-package emoji;
+package lk.ijse.emoji;
 
 import com.vdurmont.emoji.EmojiParser;
 import javafx.collections.FXCollections;
@@ -33,7 +33,7 @@ public class EmojiPicker {
         emojiListView.setItems(FXCollections.observableArrayList(emojis));
 
         // Customize the appearance of the list view
-//        emojiListView.setCellFactory(param -> new EmojiCell());
+     // emojiListView.setCellFactory(param -> new EmojiCell());
 
         // Create the emoji picker hBox
         HBox hBox = new HBox(emojiListView);

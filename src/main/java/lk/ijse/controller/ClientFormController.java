@@ -1,8 +1,7 @@
 package lk.ijse.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import emoji.EmojiPicker;
+import lk.ijse.emoji.EmojiPicker;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,7 +34,7 @@ public class ClientFormController {
     public VBox vbox;
 
 
-    public JFXButton emojiButton;
+    //public JFXButton emojiButton;
     public TextField txtField;
     public Label txtname;
 
@@ -46,7 +45,6 @@ public class ClientFormController {
 
     public void initialize(){
         txtname.setText(clientName);
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -73,59 +71,16 @@ public class ClientFormController {
                 scrollpane.setVvalue((Double) newValue);
             }
         });
-
         //emoji();
-
     }
 
-    public void shutdown() {
-        // cleanup code here...
-        ServerFormController.receiveMessage(clientName+" left.");
-    }
 
-    private void emoji() {
-        // Create the EmojiPicker
-        EmojiPicker emojiPicker = new EmojiPicker();
-
-        VBox vBox = new VBox();
-        vBox.setPrefSize(150,300);
-        vBox.setLayoutX(400);
-        vBox.setLayoutY(175);
-        vBox.setStyle("-fx-font-size: 30");
-
-        chatPanel.getChildren().add(vBox);
-
-        // Set the emoji picker as hidden initially
-       // emojiPicker.setVisible(false);
-
-        // Show the emoji picker when the button is clicked
-       /* emojiButton.setOnAction(event -> {
-            if (emojiPicker.isVisible()){
-                emojiPicker.setVisible(false);
-            }else {
-                emojiPicker.setVisible(true);
-            }
-        });
-
-        */
-
-        // Set the selected emoji from the picker to the text field
-        emojiPicker.getEmojiListView().setOnMouseClicked(event -> {
-            String selectedEmoji = emojiPicker.getEmojiListView().getSelectionModel().getSelectedItem();
-            if (selectedEmoji != null) {
-                txtField.setText(txtField.getText()+selectedEmoji);
-            }
-            //emojiPicker.setVisible(false);
-        });
-    }
 
     public void txtMsgOnAction(ActionEvent actionEvent) {
-        sendButtonOnAction(actionEvent);
+        sendOnAction(actionEvent);
     }
 
-    public void sendButtonOnAction(ActionEvent actionEvent) {
-        sendMsg(txtField.getText());
-    }
+
 
     private void sendMsg(String msgToSend) {
         if (!msgToSend.isEmpty()){
@@ -170,28 +125,6 @@ public class ClientFormController {
             }
         }
     }
-
-    private void sendImage(String msgToSend) {
-        Image image = new Image(msgToSend);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(200);
-        imageView.setFitWidth(200);
-//        TextFlow textFlow = new TextFlow(imageView);
-        HBox hBox = new HBox();
-        hBox.setPadding(new Insets(5,5,5,10));
-        hBox.getChildren().add(imageView);
-        hBox.setAlignment(Pos.CENTER_RIGHT);
-
-        vbox.getChildren().add(hBox);
-
-        try {
-            dataOutputStream.writeUTF(clientName + "-" +msgToSend);
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void receiveMessage(String msg, VBox vBox) throws IOException {
         if (msg.matches(".*\\.(png|jpe?g|gif)$")){
             HBox hBoxName = new HBox();
@@ -248,17 +181,7 @@ public class ClientFormController {
         }
     }
 
-    public void attachedButtonOnAction(ActionEvent actionEvent) {
-        FileDialog dialog = new FileDialog((Frame)null, "Select File to Open");
-        dialog.setMode(FileDialog.LOAD);
-        dialog.setVisible(true);
-        String file = dialog.getDirectory()+dialog.getFile();
-        dialog.dispose();
-        sendImage(file);
-        System.out.println(file + " chosen.");
-    }
 
-    public void setClientName(String name) {
-        clientName = name;
+    public void sendOnAction(ActionEvent actionEvent) {  sendMsg(txtField.getText());
     }
 }
