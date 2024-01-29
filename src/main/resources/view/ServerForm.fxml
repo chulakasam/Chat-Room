@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="Panel" prefHeight="599.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ServerFormController">
+   <children>
+      <Label layoutX="133.0" layoutY="32.0" prefHeight="21.0" prefWidth="176.0" text="Hey I'm a Server">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ScrollPane fx:id="scrollpane" layoutX="21.0" layoutY="78.0" prefHeight="479.0" prefWidth="424.0">
+         <content>
+            <VBox fx:id="vbox" prefHeight="478.0" prefWidth="424.0" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

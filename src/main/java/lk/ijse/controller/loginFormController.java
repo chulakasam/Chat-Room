@@ -40,7 +40,7 @@ public class loginFormController {
     }
 
     public void LoadChat() throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/ChatWallForm.fxml"));
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/ClientForm.fxml"));
         Scene scene = new Scene(anchorPane);
         Stage stage = (Stage) loginPanel.getScene().getWindow();
         stage.setScene(scene);
