@@ -24,7 +24,7 @@ public class ServerLauncher extends Application {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(pstage.getScene().getWindow());
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/loginForm.fxml"))));
-        stage.setTitle("EChat");
+        stage.setTitle("chatRoom");
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.show();

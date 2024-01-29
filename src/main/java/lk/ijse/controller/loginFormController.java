@@ -70,18 +70,27 @@ public class loginFormController {
   }
 
     public void btnLogInOnAction(ActionEvent actionEvent) throws IOException {
+
+
         if (!txtUserName.getText().isEmpty()){
             Stage primaryStage = new Stage();
-
             Parent root = FXMLLoader.load(getClass().getResource("/view/ClientForm.fxml"));
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
+            primaryStage.setTitle(txtUserName.getText());
             primaryStage.setResizable(false);
+
+            ClientFormController controller = new ClientFormController();
+            controller.setClientName(txtUserName.getText()); // Set the parameter
+
+
             primaryStage.show();
 
             txtUserName.clear();
         }else{
             new Alert(Alert.AlertType.ERROR, "Please enter your name").show();
         }
+
+
     }
 }

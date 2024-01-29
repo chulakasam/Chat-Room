@@ -33,15 +33,13 @@ public class ClientFormController {
     public ScrollPane scrollpane;
     public VBox vbox;
 
-
     //public JFXButton emojiButton;
     public TextField txtField;
     public Label txtname;
-
     private Socket socket;
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
-    private String clientName = "Client";
+    String clientName;
 
     public void initialize(){
         txtname.setText(clientName);
@@ -71,20 +69,7 @@ public class ClientFormController {
                 scrollpane.setVvalue((Double) newValue);
             }
         });
-        //emoji();
     }
-    public void shutdown() {
-        // cleanup code here...
-        ServerFormController.receiveMessage(clientName+" left.");
-    }
-
-
-    public void txtMsgOnAction(ActionEvent actionEvent) {
-        sendOnAction(actionEvent);
-    }
-
-
-
     private void sendMsg(String msgToSend) {
         if (!msgToSend.isEmpty()){
             if (!msgToSend.matches(".*\\.(png|jpe?g|gif)$")){
@@ -184,7 +169,7 @@ public class ClientFormController {
         }
     }
     public void setClientName(String name) {
-        clientName = name;
+        clientName=name;
     }
 
 
