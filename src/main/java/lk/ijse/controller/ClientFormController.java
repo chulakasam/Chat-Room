@@ -49,7 +49,7 @@ public class ClientFormController {
             @Override
             public void run() {
                 try{
-                    socket = new Socket("localhost", 3001);
+                    socket = new Socket("localhost", 5000);
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     dataOutputStream = new DataOutputStream(socket.getOutputStream());
                     System.out.println("Client connected");
@@ -73,7 +73,10 @@ public class ClientFormController {
         });
         //emoji();
     }
-
+    public void shutdown() {
+        // cleanup code here...
+        ServerFormController.receiveMessage(clientName+" left.");
+    }
 
 
     public void txtMsgOnAction(ActionEvent actionEvent) {
@@ -179,6 +182,9 @@ public class ClientFormController {
                 }
             });
         }
+    }
+    public void setClientName(String name) {
+        clientName = name;
     }
 
 
