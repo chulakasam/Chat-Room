@@ -11,30 +11,42 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.awt.*;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+
 public class ClientFormController {
+    private final String[] emojis = {
+            "\uD83D\uDE00", // 😀
+            "\uD83D\uDE01", // 😁
+            "\uD83D\uDE02", // 😂
+            "\uD83D\uDE11", // 😑
+            "\uD83D\uDE12", // 😒
+            "\uD83D\uDE13"  // 😓
+    };
     public AnchorPane chatPanel;
     public ScrollPane scrollpane;
     public VBox vbox;
     public TextField txtField;
     public Label txtname;
     public JFXButton emojiButton;
+    public AnchorPane emojipanel;
+    public GridPane emojiGridPanel;
     private Socket socket;
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
@@ -68,17 +80,51 @@ public class ClientFormController {
                 scrollpane.setVvalue((Double) newValue);
             }
         });
+        emoji();
+    }
+    public void emoji(){
+        emojipanel.setVisible(true);
+        int buttonIndex = 0;
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 2; column++) {
+                if (buttonIndex < emojis.length) {
+                    String emoji = emojis[buttonIndex];
+                    JFXButton emojiButton = createEmojiButton(emoji);
+                    emojiGridPanel.add(emojiButton, column, row);
+                    buttonIndex++;
+                } else {
+                    break;
+                }
+            }
+        }
 
     }
-    private void sendMsg(String msgToSend) {
-        if (!msgToSend.isEmpty()){
-            if (!msgToSend.matches(".*\\.(png|jpe?g|gif)$")){
+
+    private JFXButton createEmojiButton(String emoji) {
+        JFXButton button = new JFXButton(emoji);
+        button.getStyleClass().add("emoji-button");
+        button.setOnAction(this::emojiButtonAction);
+        button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        GridPane.setFillWidth(button, true);
+        GridPane.setFillHeight(button, true);
+        button.setStyle("-fx-font-size: 15; -fx-text-fill: black; -fx-background-color: #F0F0F0; -fx-border-radius: 50");
+        return button;
+    }
+
+    private void emojiButtonAction(ActionEvent event) {
+        emojipanel.setVisible(true);
+        JFXButton button = (JFXButton) event.getSource();
+        txtField.appendText(button.getText());
+    }
+    private void sendMsg(String msg) {
+        if (!msg.isEmpty()){
+            if (!msg.matches(".*\\.(png|jpe?g|gif)$")){
 
                 HBox hBox = new HBox();
                 hBox.setAlignment(Pos.CENTER_RIGHT);
                 hBox.setPadding(new Insets(5, 5, 0, 10));
 
-                Text text = new Text(msgToSend);
+                Text text = new Text(msg);
                 text.setStyle("-fx-font-size: 14");
                 TextFlow textFlow = new TextFlow(text);
 
@@ -103,7 +149,7 @@ public class ClientFormController {
 
 
                 try {
-                    dataOutputStream.writeUTF(clientName + "-" + msgToSend);
+                    dataOutputStream.writeUTF(clientName + "-" + msg);
                     dataOutputStream.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -148,7 +194,10 @@ public class ClientFormController {
     public void setClientName(String name) {
         clientName=name;
     }
-    public void sendOnAction(ActionEvent actionEvent) {  sendMsg(txtField.getText());
+    public void sendOnAction(ActionEvent actionEvent) {
+        sendMsg(txtField.getText());
+    }
+    public void btnEmojiOnAction(ActionEvent event) {
     }
 
 }
