@@ -1,7 +1,7 @@
 package lk.ijse.controller;
 
 import com.jfoenix.controls.JFXButton;
-import lk.ijse.emoji.EmojiPicker;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -32,22 +32,21 @@ public class ClientFormController {
     public AnchorPane chatPanel;
     public ScrollPane scrollpane;
     public VBox vbox;
-
-    //public JFXButton emojiButton;
     public TextField txtField;
     public Label txtname;
+    public JFXButton emojiButton;
     private Socket socket;
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
-    String clientName;
+    String clientName="";
 
     public void initialize(){
-        txtname.setText(clientName);
+        //txtname.setText(clientName);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    socket = new Socket("localhost", 5000);
+                    socket = new Socket("localhost", 5002);
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     dataOutputStream = new DataOutputStream(socket.getOutputStream());
                     System.out.println("Client connected");
@@ -69,6 +68,7 @@ public class ClientFormController {
                 scrollpane.setVvalue((Double) newValue);
             }
         });
+
     }
     private void sendMsg(String msgToSend) {
         if (!msgToSend.isEmpty()){
@@ -114,65 +114,41 @@ public class ClientFormController {
         }
     }
     public static void receiveMessage(String msg, VBox vBox) throws IOException {
-        if (msg.matches(".*\\.(png|jpe?g|gif)$")){
-            HBox hBoxName = new HBox();
-            hBoxName.setAlignment(Pos.CENTER_LEFT);
-            Text textName = new Text(msg.split("[-]")[0]);
-            TextFlow textFlowName = new TextFlow(textName);
-            hBoxName.getChildren().add(textFlowName);
 
-            Image image = new Image(msg.split("[-]")[1]);
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(200);
-            imageView.setFitWidth(200);
-            HBox hBox = new HBox();
-            hBox.setAlignment(Pos.CENTER_LEFT);
-            hBox.setPadding(new Insets(5,5,5,10));
-            hBox.getChildren().add(imageView);
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    vBox.getChildren().add(hBoxName);
-                    vBox.getChildren().add(hBox);
-                }
-            });
+        String name = msg.split("-")[0];
+        String msgFromServer = msg.split("-")[1];
 
-        }else {
-            String name = msg.split("-")[0];
-            String msgFromServer = msg.split("-")[1];
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hBox.setPadding(new Insets(5,5,5,10));
 
-            HBox hBox = new HBox();
-            hBox.setAlignment(Pos.CENTER_LEFT);
-            hBox.setPadding(new Insets(5,5,5,10));
+        HBox hBoxName = new HBox();
+        hBoxName.setAlignment(Pos.CENTER_LEFT);
+        Text textName = new Text(name);
+        TextFlow textFlowName = new TextFlow(textName);
+        hBoxName.getChildren().add(textFlowName);
 
-            HBox hBoxName = new HBox();
-            hBoxName.setAlignment(Pos.CENTER_LEFT);
-            Text textName = new Text(name);
-            TextFlow textFlowName = new TextFlow(textName);
-            hBoxName.getChildren().add(textFlowName);
+        Text text = new Text(msgFromServer);
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setStyle("-fx-background-color: #abb8c3; -fx-font-weight: bold; -fx-background-radius: 20px");
+        textFlow.setPadding(new Insets(5,10,5,10));
+        text.setFill(Color.color(0,0,0));
 
-            Text text = new Text(msgFromServer);
-            TextFlow textFlow = new TextFlow(text);
-            textFlow.setStyle("-fx-background-color: #abb8c3; -fx-font-weight: bold; -fx-background-radius: 20px");
-            textFlow.setPadding(new Insets(5,10,5,10));
-            text.setFill(Color.color(0,0,0));
+        hBox.getChildren().add(textFlow);
 
-            hBox.getChildren().add(textFlow);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vBox.getChildren().add(hBoxName);
+                vBox.getChildren().add(hBox);
+            }
+        });
 
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    vBox.getChildren().add(hBoxName);
-                    vBox.getChildren().add(hBox);
-                }
-            });
-        }
     }
     public void setClientName(String name) {
         clientName=name;
     }
-
-
     public void sendOnAction(ActionEvent actionEvent) {  sendMsg(txtField.getText());
     }
+
 }

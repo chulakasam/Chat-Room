@@ -40,7 +40,6 @@ public class ServerFormController {
                 scrollpane.setVvalue((Double) newValue);
             }
         });
-
         new Thread(() -> {
             try {
                 server = Server.getInstance();
@@ -49,7 +48,6 @@ public class ServerFormController {
                 e.printStackTrace();
             }
         }).start();
-
         receiveMessage("Sever Running..");
         receiveMessage("Waiting for User..");
     }
@@ -63,8 +61,7 @@ public class ServerFormController {
             text.setStyle("-fx-font-size: 14");
             TextFlow textFlow = new TextFlow(text);
 
-//            #0693e3 #37d67a #40bf75
-            textFlow.setStyle("-fx-background-color: #0693e3; -fx-font-weight: bold; -fx-color: white; -fx-background-radius: 20px");
+            textFlow.setStyle("-fx-background-color: #525250; -fx-font-weight: bold; -fx-color: white; -fx-background-radius: 20px");
             textFlow.setPadding(new Insets(5,10,5,10));
             text.setFill(Color.color(1,1,1));
 
@@ -73,6 +70,7 @@ public class ServerFormController {
             HBox hBoxTime = new HBox();
             hBoxTime.setAlignment(Pos.CENTER_RIGHT);
             hBoxTime.setPadding(new Insets(0,5,5,10));
+
             String stringTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
             Text time = new Text(stringTime);
             time.setStyle("-fx-font-size: 8");
@@ -114,7 +112,7 @@ public class ServerFormController {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR,"something went wrong. can't add client").show();
         }
-        stage.setTitle("EChat");
+        stage.setTitle("chatRoom");
         stage.centerOnScreen();
         stage.setResizable(false);
         stage.show();
