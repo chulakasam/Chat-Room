@@ -20,6 +20,8 @@ public class loginFormController {
     }
     public void btnLogInOnAction(ActionEvent actionEvent) throws IOException {
       if (!txtUserName.getText().isEmpty()){
+
+
             Stage primaryStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("/view/ClientForm.fxml"));
             Scene scene = new Scene(root);

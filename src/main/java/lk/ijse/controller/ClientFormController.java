@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -19,13 +21,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+
+import java.io.*;
 import java.net.Socket;
 
+import java.nio.file.Files;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -44,7 +48,6 @@ public class ClientFormController {
     public VBox vbox;
     public TextField txtField;
     public Label txtname;
-    public JFXButton emojiButton;
     public AnchorPane emojipanel;
     public GridPane emojiGridPanel;
     private Socket socket;
@@ -52,13 +55,13 @@ public class ClientFormController {
     private DataOutputStream dataOutputStream;
     String clientName="";
 
-    public void initialize(){
-        //txtname.setText(clientName);
+
+    public void initialize() throws IOException {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    socket = new Socket("localhost", 5002);
+                    socket = new Socket("localhost", 5000);
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     dataOutputStream = new DataOutputStream(socket.getOutputStream());
                     System.out.println("Client connected");
@@ -73,7 +76,6 @@ public class ClientFormController {
                 }
             }
         }).start();
-
         this.vbox.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
@@ -81,6 +83,7 @@ public class ClientFormController {
             }
         });
         emoji();
+
     }
     public void emoji(){
         emojipanel.setVisible(true);
@@ -99,7 +102,6 @@ public class ClientFormController {
         }
 
     }
-
     private JFXButton createEmojiButton(String emoji) {
         JFXButton button = new JFXButton(emoji);
         button.getStyleClass().add("emoji-button");
@@ -110,7 +112,6 @@ public class ClientFormController {
         button.setStyle("-fx-font-size: 15; -fx-text-fill: black; -fx-background-color: #F0F0F0; -fx-border-radius: 50");
         return button;
     }
-
     private void emojiButtonAction(ActionEvent event) {
         emojipanel.setVisible(true);
         JFXButton button = (JFXButton) event.getSource();
@@ -119,7 +120,7 @@ public class ClientFormController {
     private void sendMsg(String msg) {
         if (!msg.isEmpty()){
             if (!msg.matches(".*\\.(png|jpe?g|gif)$")){
-
+                //alignment
                 HBox hBox = new HBox();
                 hBox.setAlignment(Pos.CENTER_RIGHT);
                 hBox.setPadding(new Insets(5, 5, 0, 10));
@@ -128,13 +129,13 @@ public class ClientFormController {
                 text.setStyle("-fx-font-size: 14");
                 TextFlow textFlow = new TextFlow(text);
 
-//              #0693e3 #37d67a #40bf75
-                textFlow.setStyle("-fx-background-color: #68fcdd; -fx-font-weight: bold; -fx-color: #ffffff; -fx-background-radius: 20px");
+
+                textFlow.setStyle("-fx-background-color: #1fc1ef; -fx-font-weight: bold; -fx-color: #ffffff; -fx-background-radius: 20px");
                 textFlow.setPadding(new Insets(5, 10, 5, 10));
                 text.setFill(Color.color(1, 1, 1));
 
                 hBox.getChildren().add(textFlow);
-
+                //set msg time
                 HBox hBoxTime = new HBox();
                 hBoxTime.setAlignment(Pos.CENTER_RIGHT);
                 hBoxTime.setPadding(new Insets(0, 5, 5, 10));
@@ -146,7 +147,6 @@ public class ClientFormController {
 
                 vbox.getChildren().add(hBox);
                 vbox.getChildren().add(hBoxTime);
-
 
                 try {
                     dataOutputStream.writeUTF(clientName + "-" + msg);
@@ -197,7 +197,34 @@ public class ClientFormController {
     public void sendOnAction(ActionEvent actionEvent) {
         sendMsg(txtField.getText());
     }
-    public void btnEmojiOnAction(ActionEvent event) {
+    public void btnSendImageOnAction(ActionEvent actionEvent) {
+
+        FileChooser fileChoose = new FileChooser();
+        fileChoose.setTitle("Select Image File");
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg");
+        fileChoose.getExtensionFilters().add(imageFilter);
+        File selectedFile = fileChoose.showOpenDialog(new Stage());
+
+        if (selectedFile != null) {
+            try {
+                byte[] bytes = Files.readAllBytes(selectedFile.toPath());
+                HBox hBox = new HBox();
+                hBox.setStyle("-fx-fill-height: true; -fx-min-height: 50; -fx-pref-width: 520; -fx-max-width: 520; -fx-padding: 10; -fx-alignment: center-right;");
+
+
+                ImageView imageView = new ImageView(new Image(new FileInputStream(selectedFile)));
+                imageView.setStyle("-fx-padding: 10px;");
+                imageView.setFitHeight(180);
+                imageView.setFitWidth(100);
+
+                hBox.getChildren().addAll(imageView);
+                vbox.getChildren().add(hBox);
+
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

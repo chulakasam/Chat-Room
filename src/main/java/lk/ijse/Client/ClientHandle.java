@@ -1,5 +1,7 @@
 package lk.ijse.Client;
 
+import lk.ijse.controller.ClientFormController;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ public class ClientHandle { private Socket socket;
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
     private String msg = "";
+    private ClientFormController clientFormController=new ClientFormController();
 
     public ClientHandle(Socket socket, List<ClientHandle> clients) {
         try {
@@ -41,4 +44,6 @@ public class ClientHandle { private Socket socket;
             }
         }).start();
     }
+
+
 }
