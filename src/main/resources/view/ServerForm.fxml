@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="Panel" prefHeight="599.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ServerFormController">
+<AnchorPane fx:id="Panel" prefHeight="599.0" prefWidth="462.0" stylesheets="@../style/Background.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ServerFormController">
    <children>
       <Label layoutX="133.0" layoutY="32.0" prefHeight="21.0" prefWidth="176.0" text="Hey I'm a Server">
          <font>
@@ -19,6 +18,5 @@
             <VBox fx:id="vbox" prefHeight="478.0" prefWidth="424.0" />
          </content>
       </ScrollPane>
-      <JFXButton layoutX="353.0" layoutY="31.0" onAction="#btnAddOnAction" text="add" />
    </children>
 </AnchorPane>

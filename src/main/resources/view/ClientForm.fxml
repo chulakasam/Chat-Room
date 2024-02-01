@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="chatPanel" prefHeight="599.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ClientFormController">
+<AnchorPane fx:id="chatPanel" prefHeight="599.0" prefWidth="462.0" stylesheets="@../style/Background.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ClientFormController">
    <children>
       <ImageView fitHeight="41.0" fitWidth="41.0" layoutX="330.0" layoutY="529.0" pickOnBounds="true" preserveRatio="true">
          <image>
