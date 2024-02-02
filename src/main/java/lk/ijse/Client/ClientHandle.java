@@ -14,7 +14,6 @@ public class ClientHandle { private Socket socket;
     private DataOutputStream dataOutputStream;
     private String msg = "";
     private ClientFormController clientFormController=new ClientFormController();
-
     public ClientHandle(Socket socket, List<ClientHandle> clients) {
         try {
             this.socket = socket;

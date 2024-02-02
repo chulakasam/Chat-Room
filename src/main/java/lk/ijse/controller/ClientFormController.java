@@ -61,7 +61,7 @@ public class ClientFormController {
             @Override
             public void run() {
                 try{
-                    socket = new Socket("localhost", 5000);
+                    socket = new Socket("localhost", 5001);
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     dataOutputStream = new DataOutputStream(socket.getOutputStream());
                     System.out.println("Client connected");
@@ -198,33 +198,45 @@ public class ClientFormController {
         sendMsg(txtField.getText());
     }
     public void btnSendImageOnAction(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", ".png",".jpg",".gif",".bmp","*.jpeg")
+        );
+        Stage stage = (Stage) chatPanel.getScene().getWindow();
 
-        FileChooser fileChoose = new FileChooser();
-        fileChoose.setTitle("Select Image File");
-        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg");
-        fileChoose.getExtensionFilters().add(imageFilter);
-        File selectedFile = fileChoose.showOpenDialog(new Stage());
+        File file = fileChooser.showOpenDialog(stage);
 
-        if (selectedFile != null) {
-            try {
-                byte[] bytes = Files.readAllBytes(selectedFile.toPath());
-                HBox hBox = new HBox();
-                hBox.setStyle("-fx-fill-height: true; -fx-min-height: 50; -fx-pref-width: 520; -fx-max-width: 520; -fx-padding: 10; -fx-alignment: center-right;");
+        if (file != null) {
+            String sendImage = file.toURI().toString();
+            sendToClient(sendImage);
+        }
 
+    }
+    private void sendToClient(String sendImage) {
+        HBox hBoxName = new HBox();
+        hBoxName.setAlignment(Pos.CENTER_RIGHT);
+        Text textName = new Text("Me");
+        TextFlow textFlowName = new TextFlow(textName);
+        hBoxName.getChildren().add(textFlowName);
 
-                ImageView imageView = new ImageView(new Image(new FileInputStream(selectedFile)));
-                imageView.setStyle("-fx-padding: 10px;");
-                imageView.setFitHeight(180);
-                imageView.setFitWidth(100);
+        Image image = new Image(sendImage);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
 
-                hBox.getChildren().addAll(imageView);
-                vbox.getChildren().add(hBox);
+        HBox hBox = new HBox();
+        hBox.setPadding(new Insets(5,5,5,10));
+        hBox.getChildren().add(imageView);
+        hBox.setAlignment(Pos.CENTER_RIGHT);
 
+        vbox.getChildren().add(hBoxName);
+        vbox.getChildren().add(hBox);
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            dataOutputStream.writeUTF(clientName + "-" + sendImage);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
-
 }
